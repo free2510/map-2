@@ -34,37 +34,33 @@
                 .setLngLat([lng2, lat2])
                 .addTo(map);
 
-            // Draw path between the two points
-            var coordinates = [
-                [lng1, lat1],
-                [lng2, lat2]
-            ];
-            
-            map.on('load', function() {
-                map.addLayer({
-                    'id': 'route',
-                    'type': 'line',
-                    'source': {
-                        'type': 'geojson',
-                        'data': {
-                            'type': 'Feature',
-                            'properties': {},
-                            'geometry': {
-                                'type': 'LineString',
-                                'coordinates': coordinates
+            // Fetch route using Mapbox Directions API
+            fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${lng1},${lat1};${lng2},${lat2}?geometries=geojson&access_token=${mapboxgl.accessToken}`)
+                .then(response => response.json())
+                .then(data => {
+                    var route = data.routes[0].geometry;
+                    map.addLayer({
+                        'id': 'route',
+                        'type': 'line',
+                        'source': {
+                            'type': 'geojson',
+                            'data': {
+                                'type': 'Feature',
+                                'properties': {},
+                                'geometry': route
                             }
+                        },
+                        'layout': {
+                            'line-join': 'round',
+                            'line-cap': 'round'
+                        },
+                        'paint': {
+                            'line-color': '#3887be',
+                            'line-width': 8
                         }
-                    },
-                    'layout': {
-                        'line-join': 'round',
-                        'line-cap': 'round'
-                    },
-                    'paint': {
-                        'line-color': '#A020F0',
-                        'line-width': 8
-                    }
+                    });
                 });
-            });
+
         }
 
         // Get latitude and longitude from query parameters
