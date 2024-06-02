@@ -21,21 +21,20 @@
                 container: 'map',
                 style: 'mapbox://styles/mapbox/satellite-v9',
                 center: [lng1, lat1],
-                zoom: 20
+                zoom: 12
             });
 
-            // Add marker for the first point
-            new mapboxgl.Marker()
+            // Add marker for the first point (red)
+            new mapboxgl.Marker({ color: 'red' })
                 .setLngLat([lng1, lat1])
                 .addTo(map);
 
-            // Add marker for the second point
-            new mapboxgl.Marker()
+            // Add marker for the second point (blue)
+            new mapboxgl.Marker({ color: 'blue' })
                 .setLngLat([lng2, lat2])
                 .addTo(map);
 
             // Draw path between the two points
-            new mapboxgl.NavigationControl().addTo(map);
             var coordinates = [
                 [lng1, lat1],
                 [lng2, lat2]
